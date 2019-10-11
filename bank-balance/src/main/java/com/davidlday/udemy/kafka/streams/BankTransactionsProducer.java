@@ -15,8 +15,8 @@ public class BankTransactionsProducer {
 
   public static Integer minDollars = 0;
   public static Integer maxDollars = 9999;
-  static String[] customers = {"John", "Mary", "David", "Logan", "Dylan", "Denna"};
-  static Integer msgPerSecond = 100;
+  private static String[] customers = {"John", "Mary", "David", "Logan", "Dylan", "Denna"};
+  private static Integer msgPerSecond = 100;
 
   public static void main(String[] args) {
     Properties config = new Properties();
@@ -24,7 +24,6 @@ public class BankTransactionsProducer {
     config.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
     config.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
     config.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-    // producer acks -> "all" is the strongest guarantee
     config.setProperty(ProducerConfig.ACKS_CONFIG, "all");
     config.setProperty(ProducerConfig.RETRIES_CONFIG, "3");
     config.setProperty(ProducerConfig.LINGER_MS_CONFIG, "1");

@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 public class BankTransactionsProducerTests {
 
   @Test
-  public void generateTransaction(){
+  public void generateTransaction() {
     ProducerRecord<String, String> record = BankTransactionsProducer.generateTransaction("John");
     String key = record.key();
     String value = record.value();
@@ -30,7 +30,6 @@ public class BankTransactionsProducerTests {
       e.printStackTrace();
     }
     System.out.println(value);
-
   }
 
 
