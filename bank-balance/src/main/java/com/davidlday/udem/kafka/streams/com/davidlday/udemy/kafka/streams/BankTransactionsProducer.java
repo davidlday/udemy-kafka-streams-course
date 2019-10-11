@@ -13,8 +13,8 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class BankTransactionsProducer {
 
-  static Integer minDollars = 0;
-  static Integer maxDollars = 9999;
+  public static Integer minDollars = 0;
+  public static Integer maxDollars = 9999;
   static String[] customers = {"John", "Mary", "David", "Logan", "Dylan", "Denna"};
   static Integer msgPerSecond = 100;
 
@@ -50,7 +50,7 @@ public class BankTransactionsProducer {
     producer.close();
   }
 
-  private static ProducerRecord<String, String> generateTransaction(String name) {
+  public static ProducerRecord<String, String> generateTransaction(String name) {
     // JSON object
     ObjectNode transaction = JsonNodeFactory.instance.objectNode();
     // Random amount between minDollars and maxDollars
