@@ -1,4 +1,4 @@
-package com.davidlday.udem.kafka.streams.com.davidlday.udemy.kafka.streams;
+package com.davidlday.udemy.kafka.streams;
 
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;

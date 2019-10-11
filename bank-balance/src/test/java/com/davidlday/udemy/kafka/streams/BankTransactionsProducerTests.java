@@ -1,6 +1,5 @@
 package com.davidlday.udemy.kafka.streams;
 
-import com.davidlday.udem.kafka.streams.com.davidlday.udemy.kafka.streams.BankTransactionsProducer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.producer.ProducerRecord;
