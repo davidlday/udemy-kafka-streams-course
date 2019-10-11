@@ -36,17 +36,18 @@ public class BankTransactionsProducer {
     int counter = 0;
     while (true) {
       System.out.println("Transaction batch: " + counter);
-      for (String customer : customers) {
-        try {
+      try {
+        for (String customer : customers) {
           ProducerRecord<String, String> record = generateTransaction(customer);
           producer.send(record);
-          Thread.sleep((1 / customers.length) * (1000 / msgPerSecond) );
+          Thread.sleep((1 / customers.length) * (1000 / msgPerSecond));
           counter += 1;
-        } catch (InterruptedException e) {
-          break;
         }
+      } catch (InterruptedException e) {
+        break;
       }
     }
+    producer.close();
   }
 
   private static ProducerRecord<String, String> generateTransaction(String name) {
