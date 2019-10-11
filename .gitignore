@@ -1,3 +1,9 @@
+# My additions
+# target folders
+**/target/
+# .idea folders
+**/.idea/
+
 # Java
 # Compiled class file
 *.class
