@@ -16,7 +16,7 @@ public class BankTransactionsProducer {
   public static Integer minDollars = 0;
   public static Integer maxDollars = 9999;
   private static String[] customers = {"John", "Mary", "David", "Logan", "Dylan", "Denna"};
-  private static Integer msgPerSecond = 100;
+  private static Integer msgPerSecond = 6;
 
   public static void main(String[] args) {
     Properties config = new Properties();
@@ -39,7 +39,7 @@ public class BankTransactionsProducer {
         for (String customer : customers) {
           ProducerRecord<String, String> record = generateTransaction(customer);
           producer.send(record);
-          Thread.sleep((1 / customers.length) * (1000 / msgPerSecond));
+          Thread.sleep((1000 / msgPerSecond));
           counter += 1;
         }
       } catch (InterruptedException e) {
