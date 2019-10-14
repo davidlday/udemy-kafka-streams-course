@@ -22,14 +22,8 @@ import java.time.Instant;
 import java.util.Properties;
 
 public class BankBalanceApp {
-  public static void main(String[] args) {
-    Properties config = new Properties();
-    config.put(StreamsConfig.APPLICATION_ID_CONFIG, "bank-balance-application");
-    config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-    config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-    config.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, "0"); // Disabled for demonstration only
-    config.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG, StreamsConfig.EXACTLY_ONCE);
 
+  public Topology createTopology() {
     final Serializer<JsonNode> jsonSerializer = new JsonSerializer();
     final Deserializer<JsonNode> jsonDeserializer = new JsonDeserializer();
     final Serde<JsonNode> jsonSerde = Serdes.serdeFrom(jsonSerializer, jsonDeserializer);
@@ -55,8 +49,21 @@ public class BankBalanceApp {
 
     accountBalances.toStream().to("account-balances", Produced.with(Serdes.String(), jsonSerde));
 
+    return streamsBuilder.build();
+  }
+
+  public static void main(String[] args) {
+    Properties config = new Properties();
+    config.put(StreamsConfig.APPLICATION_ID_CONFIG, "bank-balance-application");
+    config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+    config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+    config.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, "0"); // Disabled for demonstration only
+    config.put(StreamsConfig.PROCESSING_GUARANTEE_CONFIG, StreamsConfig.EXACTLY_ONCE);
+
+    BankBalanceApp bankBalanceApp = new BankBalanceApp();
+
     // Start the streams app
-    Topology topology = streamsBuilder.build();
+    Topology topology = bankBalanceApp.createTopology();
     KafkaStreams streams = new KafkaStreams(topology, config);
     streams.cleanUp();
     streams.start();
