@@ -23,7 +23,7 @@ public class UserEnrichmentApp {
     KStream<String, String> userPurchasesJoin = purchases.join(
       users,
       (key, value) -> key,
-      (user, purchase) -> "Purchase=" + purchase + ",UserInfo=[" + user + "]"
+      (purchase, user) -> "Purchase=" + purchase + ",UserInfo=[" + user + "]"
     );
     userPurchasesJoin.to("user-purchases-join");
 
@@ -31,7 +31,7 @@ public class UserEnrichmentApp {
     KStream<String, String> userPurchaseLeftJoin = purchases.leftJoin(
       users,
       (key, value) -> key,
-      (user, purchase) -> {
+      (purchase, user) -> {
         if (user != null) {
           return "Purchase=" + purchase + ",UserInfo=[" + user + "]";
         } else {
