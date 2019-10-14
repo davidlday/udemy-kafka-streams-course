@@ -4,9 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.apache.kafka.clients.producer.ProducerRecord;
-import org.apache.kafka.common.serialization.*;
+import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
 import org.apache.kafka.connect.json.JsonDeserializer;
-import org.apache.kafka.connect.json.JsonSerializer;
 import org.apache.kafka.streams.StreamsConfig;
 import org.apache.kafka.streams.Topology;
 import org.apache.kafka.streams.TopologyTestDriver;
@@ -23,9 +23,6 @@ import static org.junit.Assert.assertEquals;
 public class BankBalanceAppTests {
 
   private TopologyTestDriver testDriver;
-  private final Serializer<JsonNode> jsonSerializer = new JsonSerializer();
-  private final Deserializer<JsonNode> jsonDeserializer = new JsonDeserializer();
-  private final Serde<JsonNode> jsonSerde = Serdes.serdeFrom(jsonSerializer, jsonDeserializer);
   private StringSerializer stringSerializer = new StringSerializer();
   private ConsumerRecordFactory<String, String> recordFactory =
     new ConsumerRecordFactory<>(stringSerializer, stringSerializer);
