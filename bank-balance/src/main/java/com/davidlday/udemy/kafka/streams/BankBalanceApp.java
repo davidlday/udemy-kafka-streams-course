@@ -83,8 +83,8 @@ public class BankBalanceApp {
     newBalance.put("balance", currentBalance.get("balance").asInt()
       + transaction.get("amount").asInt());
 
-    Long balanceEpoch = Instant.parse(currentBalance.get("lastUpdated").asText()).toEpochMilli();
-    Long transactionEpoch = Instant.parse(transaction.get("time").asText()).toEpochMilli();
+    long balanceEpoch = Instant.parse(currentBalance.get("lastUpdated").asText()).toEpochMilli();
+    long transactionEpoch = Instant.parse(transaction.get("time").asText()).toEpochMilli();
     Instant newBalanceInstant = Instant.ofEpochMilli(Math.max(balanceEpoch, transactionEpoch));
     newBalance.put("lastUpdated", newBalanceInstant.toString());
 
