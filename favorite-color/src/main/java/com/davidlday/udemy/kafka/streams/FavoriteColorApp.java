@@ -2,15 +2,14 @@ package com.davidlday.udemy.kafka.streams;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.Serde;
-import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.common.serialization.Serdes;
+import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.*;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.KTable;
-import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.kstream.Materialized;
+import org.apache.kafka.streams.kstream.Produced;
 import org.apache.kafka.streams.state.KeyValueStore;
-
 
 import java.util.Arrays;
 import java.util.Properties;
@@ -25,6 +24,21 @@ public class FavoriteColorApp {
     config.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass());
     config.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass());
 
+    FavoriteColorApp favoriteColorApp = new FavoriteColorApp();
+
+    Topology topology = favoriteColorApp.createTopology();
+    KafkaStreams streams = new KafkaStreams(topology, config);
+    streams.start();
+
+    // Print the topology
+    System.out.println(streams.toString());
+
+    // shutdown hook to correctly close the streams application
+    Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
+
+  }
+
+  public Topology createTopology() {
     StreamsBuilder streamsBuilder = new StreamsBuilder();
     KStream<String, String> favoriteColorInput = streamsBuilder.stream("favorite-color-input");
 
@@ -37,7 +51,8 @@ public class FavoriteColorApp {
 
     usersAndColors.to("favorite-color-intermediary");
 
-    KTable<String, String> usersAndColorsTable = streamsBuilder.table("favorite-color-intermediary");
+    KTable<String, String> usersAndColorsTable;
+    usersAndColorsTable = streamsBuilder.table("favorite-color-intermediary");
 
     Serde<String> stringSerde = Serdes.String();
     Serde<Long> longSerde = Serdes.Long();
@@ -51,17 +66,7 @@ public class FavoriteColorApp {
       );
 
     colorCounts.toStream().to("favorite-color-output", Produced.with(Serdes.String(), Serdes.Long()));
-
-    Topology topology = streamsBuilder.build();
-    KafkaStreams streams = new KafkaStreams(topology, config);
-    streams.start();
-
-    // Print the topology
-    System.out.println(streams.toString());
-
-    // shutdown hook to correctly close the streams application
-    Runtime.getRuntime().addShutdownHook(new Thread(streams::close));
-
+    return streamsBuilder.build();
   }
 
 }
